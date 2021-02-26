@@ -1,0 +1,103 @@
+#_                   _ _ _  _ _____ _  _
+#| | _______   ____ _| | | || |___  | || |
+#| |/ / _ \ \ / / _` | | | || |_ / /| || |_
+#|   <  __/\ V / (_| | | |__   _/ / |__   _|
+#|_|\_\___| \_/ \__,_|_|_|  |_|/_/     |_|
+
+#Maintainer: kevall474 <kevall474@tuta.io> <https://github.com/kevall474>
+#Credits: Lone_Wolf <lone_wolf@klaas-de-kat.nl> ---> For the base PKGBULD
+#Credits: Eric Engestrom <eric@engestrom.ch> ---> For the base PKGBULD
+#Credits: Jan de Groot <jgc@archlinux.org> ---> For the base PKGBULD
+
+#######################################
+
+#Set compiler
+#Set 'GCC' to use GCC
+#Set 'CLANG' to use CLANG
+#Default is empty. It will build with GCC. To build with different compiler just use : env _compiler=(1 or 2) makepkg -s
+if [ -z ${_compiler+x} ]; then
+  _compiler=
+fi
+
+#######################################
+
+pkgname=libdrm-git
+pkgdesc='Userspace interface to kernel DRM services (git version)'
+pkgver=2.4.104
+pkgrel=1
+arch=('x86_64')
+url='http://dri.freedesktop.org/'
+license=('custom')
+makedepends=('libxslt' 'docbook-xsl' 'meson' 'git' 'ninja' 'valgrind' 'clang' 'llvm' 'llvm-libs' 'gcc' 'gcc-libs')
+checkdepends=('cairo' 'cunit')
+depends=('libpciaccess')
+conflicts=('libdrm')
+provides=('libdrm' 'libdrm-git')
+source=('libdrm::git+https://gitlab.freedesktop.org/mesa/drm.git'
+        'COPYING'
+md5sums=('SKIP'
+         'SKIP')
+
+pkgver(){
+  cd libdrm
+  echo 2.4.104.$(date -I | sed 's/-/_/' | sed 's/-/_/').$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build(){
+if [[ $_compiler = "1" ]]; then
+  export CC='gcc'
+  export CXX='g++'
+elif [[ $_compiler = "2" ]]; then
+  export CC='clang'
+  export CXX='clang++'
+else
+  export CC='gcc'
+  export CXX='g++'
+fi
+
+  cd libdrm
+
+  if dir build_64; then
+    rm -rf -v build_64
+  fi
+
+  mkdir build_64
+
+  meson setup build_64 \
+  -D b_ndebug=true \
+  -D buildtype=plain \
+  --wrap-mode=nofallback \
+  -Dprefix=/usr \
+  -D sysconfdir=/etc \
+  -Dlibkms=true \
+  -Dintel=true \
+  -Dradeon=true \
+  -Damdgpu=true \
+  -Dnouveau=true \
+  -Dvmwgfx=true \
+  -Domap=true \
+  -Dexynos=true \
+  -Dfreedreno=true \
+  -Dtegra=true \
+  -Dvc4=true \
+  -Detnaviv=true \
+  -Dcairo-tests=false \
+  -Dman-pages=true \
+  -Dvalgrind=true \
+  -Dfreedreno-kgsl=true \
+  -Dinstall-test-programs=true \
+  -Dudev=true
+
+  meson configure build_64/
+
+  meson compile -C build_64
+
+  ninja -C build_64
+}
+
+package_libdrm-git(){
+  DESTDIR="$pkgdir" ninja -C libdrm/build_64/ install
+
+  # installing license
+  install -Dt "$pkgdir"/usr/share/licenses/"$pkgname" -m644 COPYING
+}
