@@ -26,7 +26,7 @@ pkgdesc='Userspace interface to kernel DRM services (32-bit) (git version)'
 pkgver=2.4.104
 pkgrel=1
 arch=('i686' 'x86_64')
-url="http://dri.freedesktop.org/"
+url='http://dri.freedesktop.org/'
 license=('custom')
 makedepends=('libxslt' 'docbook-xsl' 'meson' 'git' 'ninja' 'valgrind' 'clang' 'llvm' 'llvm-libs' 'gcc' 'gcc-libs'
              'lib32-libxslt' 'lib32-clang' 'lib32-llvm' 'lib32-llvm-libs' 'lib32-gcc-libs')
