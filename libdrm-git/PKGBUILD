@@ -34,7 +34,7 @@ depends=('libpciaccess')
 conflicts=('libdrm')
 provides=('libdrm' 'libdrm-git')
 source=('libdrm::git+https://gitlab.freedesktop.org/mesa/drm.git'
-        'COPYING'
+        'COPYING')
 md5sums=('SKIP'
          'SKIP')
 
