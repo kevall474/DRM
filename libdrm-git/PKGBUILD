@@ -22,7 +22,7 @@ fi
 
 pkgname=libdrm-git
 pkgdesc='Userspace interface to kernel DRM services (git version)'
-pkgver=2.4.105
+pkgver=2.4.106
 pkgrel=1
 arch=('x86_64')
 url='http://dri.freedesktop.org/'
@@ -39,7 +39,7 @@ md5sums=('SKIP'
 
 pkgver(){
   cd libdrm
-  echo 2.4.104.$(date -I | sed 's/-/_/' | sed 's/-/_/').$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  echo 2.4.106.$(date -I | sed 's/-/_/' | sed 's/-/_/').$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build(){
