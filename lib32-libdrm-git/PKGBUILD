@@ -22,7 +22,7 @@ fi
 
 pkgname=lib32-libdrm-git
 pkgdesc='Userspace interface to kernel DRM services (32-bit) (git version)'
-pkgver=2.4.105
+pkgver=2.4.106
 pkgrel=1
 arch=('i686' 'x86_64')
 url='http://dri.freedesktop.org/'
